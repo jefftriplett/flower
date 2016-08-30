@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 import time
+import os
 import logging
 import collections
 
@@ -64,7 +65,8 @@ class ControlHandler(BaseHandler):
 
     @classmethod
     def get_active_queue_names(cls):
-        queues = set([])
+        # queues = set([])
+        queues = set(os.environ.get('FLOWER_CELERY_QUEUES', 'celery').split(','))
         for worker, info in cls.worker_cache.items():
             for q in info.get('active_queues', []):
                 queues.add(q['name'])
